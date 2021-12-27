@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import * as Font from 'expo-font';
-
+import {AppLoading} from 'expo';
 import Header from './components/Header';
 import StartGameScreen from './screens/StartGameScreen';
 import GameScreen from './screens/GameScreen';
@@ -15,6 +15,9 @@ const fetchFonts = () => {
 }
 
 export default function App() {
+
+  const [dataLoaded,setDataLoaded] = useState(false);
+
   const [userNumber, setUserNumber] = useState();
   const [guessRounds, setGuessRounds] = useState(0);
 
@@ -38,6 +41,10 @@ export default function App() {
     content = <GameScreen userChoice={userNumber} onGameOver={gameOverHandler} />;
   }else if(guessRounds > 0){
     content = <GameOverScreen roundsNumber={guessRounds} userNumber={userNumber} onRestart={configureNewGameHandler}/>;
+  }
+
+  if(!dataLoaded){
+    return <AppLoading startAsync={fetchFonts} onFinish={() => setDataLoaded(true)} onError={(err) => console.log(err)}/>;
   }
 
   return (
